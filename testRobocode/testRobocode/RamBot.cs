@@ -16,10 +16,11 @@ namespace Bot
 
             while (true)
             {
-                //this.Move();
                 this.AimRadar();
-                this.WaitFor(new RadarTurnCompleteCondition(this));
-                this.WaitFor(new MoveCompleteCondition(this));
+                this.Move();
+                //this.WaitFor(new RadarTurnCompleteCondition(this));
+                //this.WaitFor(new MoveCompleteCondition(this));
+                this.Execute();
             }
         }
 
@@ -54,8 +55,13 @@ namespace Bot
         {
             if (this.TargetEnemy.Exists())
             {
-                this.SetTurnRight(this.TargetEnemy.Bearing + 90);
-                this.SetAhead(1000 * MoveDirections);
+                // switch directions if we've stopped
+                if (this.Velocity == 0)
+                    MoveDirections *= -1;
+
+                // circle our enemy
+                SetTurnRight(this.TargetEnemy.Bearing + 90);
+                SetAhead(40 * MoveDirections);
             }
         }
         private void SmartFire()
