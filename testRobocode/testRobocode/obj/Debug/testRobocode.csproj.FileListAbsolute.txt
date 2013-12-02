@@ -1,0 +1,11 @@
+C:\Sources\testRobocode\testRobocode\bin\Debug\testRobocode.dll
+C:\Sources\testRobocode\testRobocode\bin\Debug\testRobocode.pdb
+C:\Sources\testRobocode\testRobocode\bin\Debug\robocode.dll
+C:\Sources\testRobocode\testRobocode\bin\Debug\robocode.xml
+C:\Sources\testRobocode\testRobocode\obj\Debug\testRobocode.dll
+C:\Sources\testRobocode\testRobocode\obj\Debug\testRobocode.pdb
+C:\Sources\testRobocode\testRobocode\obj\Debug\testRobocode.csprojResolveAssemblyReference.cache
+C:\Sources\Robocode\testRobocode\testRobocode\bin\Debug\testRobocode.dll
+C:\Sources\Robocode\testRobocode\testRobocode\bin\Debug\testRobocode.pdb
+C:\Sources\Robocode\testRobocode\testRobocode\obj\Debug\testRobocode.dll
+C:\Sources\Robocode\testRobocode\testRobocode\obj\Debug\testRobocode.pdb
