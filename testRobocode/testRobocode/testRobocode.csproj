@@ -35,6 +35,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,11 +43,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EnemyBot.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="RamBot.cs" />
-    <Compile Include="HelloBot.cs" />
+    <Compile Include="Strategies\Movement\RandomPointMovement.cs" />
+    <Compile Include="Strategies\IMovementStrategy.cs" />
+    <Compile Include="Strategies\Movement\CircularMovement.cs" />
+    <Compile Include="Util\Configurations.cs" />
+    <Compile Include="Models\EnemyBot.cs" />
+    <Compile Include="Util\Extensions.cs" />
+    <Compile Include="Bots\Amaterasu.cs" />
+    <Compile Include="Bots\HelloBot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\Utils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
