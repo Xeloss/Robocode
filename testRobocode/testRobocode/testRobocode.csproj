@@ -7,8 +7,8 @@
     <ProjectGuid>{0A588BD5-C5FE-4D35-9255-D5F002D16C3E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>testRobocode</RootNamespace>
-    <AssemblyName>testRobocode</AssemblyName>
+    <RootNamespace>Bot</RootNamespace>
+    <AssemblyName>Amaterasu</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -43,6 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Strategies\Aim\DirectAiming.cs" />
+    <Compile Include="Strategies\IAimingStrategy.cs" />
+    <Compile Include="Strategies\Radar\FullAndTargetedScan.cs" />
+    <Compile Include="Strategies\Radar\TargetedOscillatingScan.cs" />
+    <Compile Include="Strategies\Radar\FullScan.cs" />
+    <Compile Include="Strategies\IRadarStrategy.cs" />
     <Compile Include="Strategies\Movement\RandomPointMovement.cs" />
     <Compile Include="Strategies\IMovementStrategy.cs" />
     <Compile Include="Strategies\Movement\CircularMovement.cs" />
@@ -52,8 +58,10 @@
     <Compile Include="Bots\Amaterasu.cs" />
     <Compile Include="Bots\HelloBot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\Graphics.cs" />
     <Compile Include="Util\Utils.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

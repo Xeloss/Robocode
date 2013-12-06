@@ -17,6 +17,10 @@ namespace Bot.Movement.Strategies
         private double DestinationY = 0;
 
         private Amaterasu self;
+        private Graphic Draw 
+        {
+            get { return self.Grapher; }
+        }
 
         public RandomPointMovement(Amaterasu bot)
         {
@@ -27,7 +31,7 @@ namespace Bot.Movement.Strategies
 
         public void Move()
         {
-            self.Graphics.DrawLine(new Pen(Color.White), (float)DestinationX, (float)DestinationY, (float)self.X, (float)self.Y);
+            Draw.Line(DestinationX, DestinationY, self.X, self.Y);
 
             var distanceToMove = Utils.Distance(self.X, self.Y, DestinationX, DestinationY);
 
@@ -37,21 +41,12 @@ namespace Bot.Movement.Strategies
             var bearingFromHeading = Utils.Bearing(angle, self.Heading);
 
             self.SetTurnRight(bearingFromHeading);
-            //self.WaitFor(new TurnCompleteCondition(self));
             self.SetAhead(distanceToMove);
 
             if (self.Velocity != 0)
                 return;
 
             this.SetNewDestination();
-
-            //var bearingFromHeading = angle - self.Heading;
-
-            //while (bearingFromHeading > 180)
-            //    bearingFromHeading -= 360;
-
-            //while (bearingFromHeading < -180)
-            //    bearingFromHeading += 360;
         }
 
         private void SetNewDestination()

@@ -15,7 +15,7 @@ namespace Bot.Util
         public const byte MaxRadarBearingFromTarget = 22;
         
         public const int MaxScanDistance = 1200;
-        public const int ScansBeforeFullScan = 10;
+        public const int ScansBeforeFullScan = 15;
 
         public static int MaxDistanceFromTarget 
         {
@@ -24,7 +24,7 @@ namespace Bot.Util
         }
         public const int MinDistanceFromTarget = 150;
 
-        public const int TicksToCleanTarget = 5;
+        public const int TicksToCleanTarget = 10;
 
         public const int DamageCoefficient = (MinDistanceFromTarget + 50) * 3;
     }

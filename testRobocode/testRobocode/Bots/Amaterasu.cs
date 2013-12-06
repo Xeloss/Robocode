@@ -6,16 +6,19 @@ using Robocode.Util;
 using Bot.Util;
 using Bot.Movement.Strategies;
 using Bot.Strategies;
+using Bot.Strategies.Radar;
+using Bot.Strategies.Aim;
 
 namespace Bot.Bots
 {
     public class Amaterasu : AdvancedRobot
     {
         private IMovementStrategy MovementStrategy;
+        private IRadarStrategy RadarStrategy;
+        private IAimingStrategy AimingStrategy;
 
-        public EnemyBot TargetEnemy { get; set; }
-        
-        private int ScansSinceLastFullScan = 0;
+        internal Graphic Grapher { get; set; }
+        internal EnemyBot TargetEnemy { get; set; }       
 
         public override void Run()
         {
@@ -25,7 +28,8 @@ namespace Bot.Bots
                 if (this.ShouldCleanTarget())
                     this.TargetEnemy = null;
 
-                this.AimRadar();
+                //this.AimRadar();
+                RadarStrategy.Scan();
                 MovementStrategy.Move();
                 this.Execute();
             }
@@ -38,10 +42,10 @@ namespace Bot.Bots
 
             if (anScannedRobot.Is(this.TargetEnemy))
             {
-                if (this.ShouldAimRadar())
-                    this.AimRadar();
+                if (this.ShouldReAimRadar())
+                    this.RadarStrategy.Scan();
 
-                this.AimGun();
+                this.AimingStrategy.Aim();
                 this.WaitFor(new GunTurnCompleteCondition(this));
                 this.SmartFire();
             }
@@ -68,11 +72,17 @@ namespace Bot.Bots
             //this.BulletColor = Color.Green;
 
             this.TargetEnemy = null;
-            this.ScansSinceLastFullScan = 0;
+            this.Grapher = new Graphic(this);
+
+            #if !DEBUG
+            this.Grapher.DrawingIsEnabled = false;
+            #endif
 
             this.CalculateMaxDistanceFromTarget();
 
             this.MovementStrategy = new RandomPointMovement(this);
+            this.RadarStrategy = new FullAndTargetedScan(this);
+            this.AimingStrategy = new DirectAiming(this);
         }
         
         private void SmartFire()
@@ -86,33 +96,6 @@ namespace Bot.Bots
 
             this.Fire(firePower);
         }
-        private void AimGun()
-        {
-            if (!this.TargetEnemy.Exists())
-                return;
-
-            this.SetTurnGunRight(this.TargetEnemy.BearingFromGun);
-        }
-        private void AimRadar()
-        {
-            if (this.RadarTurnRemaining > 0)
-                return;
-
-            if (this.ShouldPerformFullScan())
-            {
-                this.SetTurnRadarRight(360);
-                this.ScansSinceLastFullScan = 0;
-            }
-            else
-            {
-                this.ScansSinceLastFullScan++;
-
-                var turningDirection = Math.Sign(this.TargetEnemy.BearingFromRadar);
-                var turningDistance = this.TargetEnemy.BearingFromRadar + turningDirection * Configurations.MaxRadarBearingFromTarget;
-
-                this.SetTurnRadarRight(turningDistance);
-            }
-        }
 
         private void UpdateTargetTo(ScannedRobotEvent anScannedRobot)
         {
@@ -120,15 +103,10 @@ namespace Bot.Bots
             this.MovementStrategy = new CircularMovement(this);
         }
 
-        private bool ShouldAimRadar()
+        private bool ShouldReAimRadar()
         {
             return this.TargetEnemy.BearingFromRadar < Configurations.MaxRadarBearingFromTarget / 2
                 && this.RadarTurnRemaining == 0;
-        }
-        private bool ShouldPerformFullScan()
-        {
-            return !this.TargetEnemy.Exists()
-                || (this.Others > 1 && this.ScansSinceLastFullScan >= Configurations.ScansBeforeFullScan);
         }
         private bool ShouldUpdateTarget(ScannedRobotEvent anScannedRobot)
         {

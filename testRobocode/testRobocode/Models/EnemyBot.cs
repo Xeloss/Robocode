@@ -2,6 +2,7 @@
 using Robocode;
 using Robocode.Util;
 using Bot.Util;
+using System;
 
 namespace Bot.Models
 {
@@ -86,6 +87,31 @@ namespace Bot.Models
         }
 
         public long LastUpdate { get; set; }
+
+        public double X 
+        {
+            get 
+            {
+                var absoluteBearing = this.Bearing + MyRobot.Heading;
+                var radians = Robocode.Util.Utils.ToRadians(absoluteBearing);
+
+                var dX = Math.Sin(radians) * this.Distance;
+
+                return MyRobot.X + dX;
+            }
+        }
+        public double Y
+        {
+            get
+            {
+                var absoluteBearing = this.Bearing + MyRobot.Heading;
+                var radians = Robocode.Util.Utils.ToRadians(absoluteBearing);
+
+                var dY = Math.Cos(radians) * this.Distance;
+
+                return MyRobot.Y + dY;
+            }
+        }
 
         public override string ToString()
         {

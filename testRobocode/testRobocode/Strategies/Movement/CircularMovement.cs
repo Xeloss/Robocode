@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,10 @@ namespace Bot.Movement.Strategies
     public class CircularMovement : IMovementStrategy
     {
         private Amaterasu self;
+        private Graphic Draw
+        {
+            get { return self.Grapher; }
+        }
 
         private int MoveDirections = 1;
         private int CloseIn = -1;
@@ -27,6 +32,8 @@ namespace Bot.Movement.Strategies
         {
             if (self.TargetEnemy.Exists())
             {
+                this.Graphicate();
+
                 // switch directions if we've stopped
                 if (self.Velocity == 0 || self.Time % TimeToNextDirectionChange == 0)
                     this.SwitchDirection();
@@ -47,6 +54,11 @@ namespace Bot.Movement.Strategies
             }
         }
 
+        private void Graphicate()
+        {
+            Draw.Circle(Color.Yellow, self.TargetEnemy.X, self.TargetEnemy.Y, self.TargetEnemy.Distance);
+            Draw.Line(Color.Yellow, self.X, self.Y, self.TargetEnemy.X, self.TargetEnemy.Y);
+        }
         private void SwitchDirection()
         {
             this.MoveDirections *= -1;
