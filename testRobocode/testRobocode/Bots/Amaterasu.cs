@@ -17,8 +17,9 @@ namespace Bot.Bots
         private IRadarStrategy RadarStrategy;
         private IAimingStrategy AimingStrategy;
 
-        internal Graphic Grapher { get; set; }
-        internal EnemyBot TargetEnemy { get; set; }       
+        internal Graphic Grapher { get; private set; }
+        internal EnemyBot TargetEnemy { get; private set; }
+        internal StrategiesFactory Strategies { get; private set; }
 
         public override void Run()
         {
@@ -28,7 +29,6 @@ namespace Bot.Bots
                 if (this.ShouldCleanTarget())
                     this.TargetEnemy = null;
 
-                //this.AimRadar();
                 RadarStrategy.Scan();
                 MovementStrategy.Move();
                 this.Execute();
@@ -55,7 +55,7 @@ namespace Bot.Bots
             if (aDeadRobot.Is(this.TargetEnemy))
             {
                 this.TargetEnemy = null;
-                this.MovementStrategy = new RandomPointMovement(this);
+                this.MovementStrategy = this.Strategies.Get<RandomPointMovement>();
             }
         }
 
@@ -79,10 +79,12 @@ namespace Bot.Bots
             #endif
 
             this.CalculateMaxDistanceFromTarget();
+            this.Strategies = new StrategiesFactory(this);
 
-            this.MovementStrategy = new RandomPointMovement(this);
-            this.RadarStrategy = new FullAndTargetedScan(this);
-            this.AimingStrategy = new DirectAiming(this);
+            this.MovementStrategy = this.Strategies.Get<RandomPointMovement>();
+            this.RadarStrategy = this.Strategies.Get<FullAndTargetedScan>();
+            this.AimingStrategy = this.Strategies.Get<DirectAiming>();
+
         }
         
         private void SmartFire()
@@ -100,7 +102,7 @@ namespace Bot.Bots
         private void UpdateTargetTo(ScannedRobotEvent anScannedRobot)
         {
             this.TargetEnemy = new EnemyBot(this, anScannedRobot) { LastUpdate = this.Time };
-            this.MovementStrategy = new CircularMovement(this);
+            this.MovementStrategy = this.Strategies.Get<CircularMovement>();
         }
 
         private bool ShouldReAimRadar()

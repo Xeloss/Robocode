@@ -9,6 +9,8 @@ namespace Bot.Util
 {
     public static class Configurations
     {
+        public const double MinDistanceFromWall = 50;
+
         public const double MaxFirePower = 3;
         public const double MinFirePower = 0.1;
 

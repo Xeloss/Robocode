@@ -34,9 +34,11 @@ namespace Bot.Movement.Strategies
             {
                 this.Graphicate();
 
-                // switch directions if we've stopped
-                if (self.Velocity == 0 || self.Time % TimeToNextDirectionChange == 0)
-                    this.SwitchDirection();
+                //// switch directions if we've stopped
+                //if (self.Velocity == 0 || self.Time % TimeToNextDirectionChange == 0)
+                //    this.SwitchDirection();
+
+                this.SelectMovingDirection();
 
                 if (self.TargetEnemy.Distance < Configurations.MinDistanceFromTarget)
                     CloseIn = 1;
@@ -54,6 +56,17 @@ namespace Bot.Movement.Strategies
             }
         }
 
+        private bool IAmNearAWall()
+        {
+            var significantWith = self.Width / 2;
+            var significantHeigh = self.Height / 2;
+
+            return self.X - significantWith < Configurations.MinDistanceFromWall // Muy cerca de la pared izquierda
+                || self.X + significantWith > self.BattleFieldWidth - Configurations.MinDistanceFromWall // Muy cerca de la pared derecha
+                || self.Y - significantHeigh < Configurations.MinDistanceFromWall // Muy cerca de la pared de abajo
+                || self.Y + significantHeigh > self.BattleFieldHeight - Configurations.MinDistanceFromWall; // Muy cerca de la pared de arriba
+        }
+
         private void Graphicate()
         {
             Draw.Circle(Color.Yellow, self.TargetEnemy.X, self.TargetEnemy.Y, self.TargetEnemy.Distance);
@@ -63,6 +76,36 @@ namespace Bot.Movement.Strategies
         {
             this.MoveDirections *= -1;
             this.TimeToNextDirectionChange = 10 + new Random().Next(30);
+        }
+
+        public void SelectMovingDirection()
+        {
+            if (self.Velocity == 0)
+                this.SwitchDirection();
+            else if (IAmNearAWall())
+            {
+                var significantWith = self.Width / 2;
+                var significantHeigh = self.Height / 2;
+
+                var heading = self.Heading;
+                var backHeading = Robocode.Util.Utils.NormalAbsoluteAngleDegrees(self.Heading + 180);
+
+                var targetAngle = 0;
+
+                if (self.X - significantWith < Configurations.MinDistanceFromWall) // Muy cerca de la pared izquierda
+                    targetAngle = 90;
+                else if (self.X + significantWith > self.BattleFieldWidth - Configurations.MinDistanceFromWall) // Muy cerca de la pared derecha
+                    targetAngle = 270;
+                else if (self.Y - significantHeigh < Configurations.MinDistanceFromWall) // Muy cerca de la pared de abajo
+                    targetAngle = 0;
+                else if (self.Y + significantHeigh > self.BattleFieldHeight - Configurations.MinDistanceFromWall) // Muy cerca de la pared de arriba
+                    targetAngle = 180;
+
+                if (Math.Abs(targetAngle - heading) < Math.Abs(targetAngle - backHeading))
+                    this.MoveDirections = 1;
+                else
+                    this.MoveDirections = -1;
+            }
         }
     }
 }

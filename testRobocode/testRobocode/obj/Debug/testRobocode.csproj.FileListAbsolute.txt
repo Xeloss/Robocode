@@ -9,3 +9,4 @@ C:\Sources\Robocode\testRobocode\testRobocode\bin\Debug\Amaterasu.dll
 C:\Sources\Robocode\testRobocode\testRobocode\bin\Debug\Amaterasu.pdb
 C:\Sources\Robocode\testRobocode\testRobocode\obj\Debug\Amaterasu.dll
 C:\Sources\Robocode\testRobocode\testRobocode\obj\Debug\Amaterasu.pdb
+C:\Sources\Robocode\testRobocode\testRobocode\obj\Debug\testRobocode.csprojResolveAssemblyReference.cache
