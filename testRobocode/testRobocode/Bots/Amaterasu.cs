@@ -32,6 +32,8 @@ namespace Bot.Bots
                 RadarStrategy.Scan();
                 MovementStrategy.Move();
                 this.Execute();
+
+                this.Graficate();
             }
         }
 
@@ -46,7 +48,6 @@ namespace Bot.Bots
                     this.RadarStrategy.Scan();
 
                 this.AimingStrategy.Aim();
-                this.WaitFor(new GunTurnCompleteCondition(this));
                 this.SmartFire();
             }
         }
@@ -96,7 +97,7 @@ namespace Bot.Bots
             firePower = Math.Min(firePower, Configurations.MaxFirePower);
             firePower = Math.Max(firePower, Configurations.MinFirePower);
 
-            this.Fire(firePower);
+            this.SetFire(firePower);
         }
 
         private void UpdateTargetTo(ScannedRobotEvent anScannedRobot)
@@ -134,6 +135,13 @@ namespace Bot.Bots
             var minBattleFieldDimension = Math.Min(this.BattleFieldWidth, this.BattleFieldHeight);
 
             Configurations.MaxDistanceFromTarget = Convert.ToInt32(Math.Min(minBattleFieldDimension, Configurations.MaxScanDistance) / 2);
+        }
+        private void Graficate()
+        {
+            if (this.TargetEnemy.Exists())
+            {
+                Grapher.Rectangle(Color.Red, this.TargetEnemy.X - 20, this.TargetEnemy.Y - 20, 40, 40);
+            }
         }
     }
 }

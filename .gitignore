@@ -1,0 +1,6 @@
+*.suo
+
+/testRobocode/testRobocode/obj
+/testRobocode/testRobocode/bin
+
+/testRobocode/testRobocode/*.user
