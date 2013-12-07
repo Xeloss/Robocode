@@ -39,12 +39,11 @@ namespace Bot.Util
 
         public static int MaxDistanceFromTarget 
         {
-            get;
-            set;
+            get { return 200; }
         }
         public static int MinDistanceFromTarget
         {
-            get { return 200; }
+            get { return 150; }
         }
 
         public static int TicksToCleanTarget

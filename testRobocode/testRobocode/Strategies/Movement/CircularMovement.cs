@@ -34,10 +34,6 @@ namespace Bot.Movement.Strategies
             {
                 this.Graphicate();
 
-                //// switch directions if we've stopped
-                //if (self.Velocity == 0 || self.Time % TimeToNextDirectionChange == 0)
-                //    this.SwitchDirection();
-
                 this.SelectMovingDirection();
 
                 if (self.TargetEnemy.Distance < Configurations.MinDistanceFromTarget)
@@ -49,7 +45,7 @@ namespace Bot.Movement.Strategies
                 var facingSide = 1;
                 if (self.TargetEnemy.Bearing > 0)
                     facingSide = -1;
-                var turningAngle = self.TargetEnemy.Bearing + facingSide * (90 + CloseIn * (15 * MoveDirections));
+                var turningAngle = self.TargetEnemy.Bearing + facingSide * (90 + CloseIn * (30 * MoveDirections));
 
                 self.SetTurnRight(turningAngle);
                 self.SetAhead(40 * MoveDirections);
@@ -101,7 +97,7 @@ namespace Bot.Movement.Strategies
                 else if (self.Y + significantHeigh > self.BattleFieldHeight - Configurations.MinDistanceFromWall) // Muy cerca de la pared de arriba
                     targetAngle = 180;
 
-                if (Math.Abs(targetAngle - heading) < Math.Abs(targetAngle - backHeading))
+                if (Math.Abs(Utils.Bearing(targetAngle, heading)) < Math.Abs(Utils.Bearing(targetAngle, backHeading)))
                     this.MoveDirections = 1;
                 else
                     this.MoveDirections = -1;

@@ -94,7 +94,6 @@ namespace Bot.Bots
             this.Grapher.DrawingIsEnabled = false;
             #endif
 
-            this.CalculateMaxDistanceFromTarget();
             this.Strategies = new StrategiesFactory(this);
 
             this.MovementStrategy = this.Strategies.Get<RandomPointMovement>();
@@ -133,12 +132,6 @@ namespace Bot.Bots
                 && (this.Time - this.TargetEnemy.LastUpdate) > Configurations.TicksToCleanTarget;
         }
 
-        private void CalculateMaxDistanceFromTarget()
-        {
-            var minBattleFieldDimension = Math.Min(this.BattleFieldWidth, this.BattleFieldHeight);
-
-            Configurations.MaxDistanceFromTarget = Convert.ToInt32(Math.Min(minBattleFieldDimension, Configurations.MaxScanDistance) / 2);
-        }
         private void Graficate()
         {
             if (this.TargetEnemy.Exists())
