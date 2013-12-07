@@ -5,13 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Bot.Bots;
+using Bot.Observer;
 using Bot.Strategies;
 using Bot.Util;
 using Robocode;
 
 namespace Bot.Movement.Strategies
 {
-    public class CircularMovement : IMovementStrategy
+    public class CircularMovement : EventObserver, IMovementStrategy
     {
         private Amaterasu self;
         private Graphic Draw
@@ -21,11 +22,16 @@ namespace Bot.Movement.Strategies
 
         private int MoveDirections = 1;
         private int CloseIn = -1;
-        private int TimeToNextDirectionChange = 20;
+        private bool ShoulSwitchDirection = false;
 
         public CircularMovement(Amaterasu bot)
         {
+            MoveDirections = 1;
+            CloseIn = -1;
+            ShoulSwitchDirection = false;
+            
             self = bot;
+            bot.Observers.Add(this);
         }
 
         public void Move()
@@ -52,6 +58,19 @@ namespace Bot.Movement.Strategies
             }
         }
 
+        public override void OnHitByBullet(HitByBulletEvent evnt)
+        {
+            this.ShoulSwitchDirection = true;
+        }
+        public override void OnHitRobot(HitRobotEvent evnt)
+        {
+            this.ShoulSwitchDirection = true;
+        }
+        public override void OnHitWall(HitWallEvent evnt)
+        {
+            this.ShoulSwitchDirection = true;
+        }
+
         private bool IAmNearAWall()
         {
             var significantWith = self.Width / 2;
@@ -63,22 +82,15 @@ namespace Bot.Movement.Strategies
                 || self.Y + significantHeigh > self.BattleFieldHeight - Configurations.MinDistanceFromWall; // Muy cerca de la pared de arriba
         }
 
-        private void Graphicate()
-        {
-            Draw.Circle(Color.GreenYellow, self.TargetEnemy.X, self.TargetEnemy.Y, self.TargetEnemy.Distance);
-            Draw.Circle(Color.GreenYellow, self.TargetEnemy.X, self.TargetEnemy.Y, 5);
-        }
         private void SwitchDirection()
         {
             this.MoveDirections *= -1;
-            this.TimeToNextDirectionChange = 10 + new Random().Next(30);
+            this.ShoulSwitchDirection = false;
         }
 
-        public void SelectMovingDirection()
+        private void SelectMovingDirection()
         {
-            if (self.Velocity == 0)
-                this.SwitchDirection();
-            else if (IAmNearAWall())
+            if (IAmNearAWall())
             {
                 var significantWith = self.Width / 2;
                 var significantHeigh = self.Height / 2;
@@ -101,7 +113,17 @@ namespace Bot.Movement.Strategies
                     this.MoveDirections = 1;
                 else
                     this.MoveDirections = -1;
+
+                this.ShoulSwitchDirection = false;
             }
+            else if (ShoulSwitchDirection)
+                this.SwitchDirection();
+        }
+        
+        private void Graphicate()
+        {
+            Draw.Circle(Color.GreenYellow, self.TargetEnemy.X, self.TargetEnemy.Y, self.TargetEnemy.Distance);
+            Draw.Circle(Color.GreenYellow, self.TargetEnemy.X, self.TargetEnemy.Y, 5);
         }
     }
 }

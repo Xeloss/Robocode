@@ -8,6 +8,7 @@ using Bot.Movement.Strategies;
 using Bot.Strategies;
 using Bot.Strategies.Radar;
 using Bot.Strategies.Aim;
+using Bot.Observer;
 
 namespace Bot.Bots
 {
@@ -20,6 +21,7 @@ namespace Bot.Bots
         internal Graphic Grapher { get; private set; }
         internal EnemyBot TargetEnemy { get; private set; }
         internal StrategiesFactory Strategies { get; private set; }
+        internal ObserversQueue Observers { get; set; }
 
         internal double FirePower
         {
@@ -54,6 +56,8 @@ namespace Bot.Bots
 
         public override void OnScannedRobot(ScannedRobotEvent anScannedRobot)
         {
+            Observers.NotifyOnScannedRobot(anScannedRobot);
+
             if (this.ShouldUpdateTarget(anScannedRobot))
                 this.UpdateTargetTo(anScannedRobot);
 
@@ -68,11 +72,25 @@ namespace Bot.Bots
         }
         public override void OnRobotDeath(RobotDeathEvent aDeadRobot)
         {
+            Observers.NotifyOnRobotDeath(aDeadRobot);
+
             if (aDeadRobot.Is(this.TargetEnemy))
             {
                 this.TargetEnemy = null;
                 this.MovementStrategy = this.Strategies.Get<RandomPointMovement>();
             }
+        }
+        public override void OnHitByBullet(HitByBulletEvent evnt)
+        {
+            Observers.NotifyOnHitByBullet(evnt);
+        }
+        public override void OnHitRobot(HitRobotEvent evnt)
+        {
+            Observers.NotifyOnHitRobot(evnt);
+        }
+        public override void OnHitWall(HitWallEvent evnt)
+        {
+            Observers.NotifyOnHitWall(evnt);
         }
 
         private void InitialSetup()
@@ -94,6 +112,7 @@ namespace Bot.Bots
             this.Grapher.DrawingIsEnabled = false;
             #endif
 
+            this.Observers = new ObserversQueue();
             this.Strategies = new StrategiesFactory(this);
 
             this.MovementStrategy = this.Strategies.Get<RandomPointMovement>();
@@ -121,7 +140,8 @@ namespace Bot.Bots
             if (anScannedRobot.Is(this.TargetEnemy))
                 return true;
 
-            if (anScannedRobot.Distance < this.TargetEnemy.Distance)
+            // Pondero distancia por energia (mientras mas cerca y menos energia tenga mejor)
+            if (anScannedRobot.Distance * anScannedRobot.Energy < this.TargetEnemy.Distance * this.TargetEnemy.Energy)
                 return true;
 
             return false;

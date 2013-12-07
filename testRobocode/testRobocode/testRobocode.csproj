@@ -31,7 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="robocode">
-      <HintPath>..\..\..\robocode\libs\robocode.dll</HintPath>
+      <HintPath>..\..\..\..\robocode\libs\robocode.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -46,6 +46,7 @@
     <Compile Include="Strategies\Aim\LinearTargeting.cs" />
     <Compile Include="Strategies\Aim\DirectAiming.cs" />
     <Compile Include="Strategies\IAimingStrategy.cs" />
+    <Compile Include="Observer\ObserversQueue.cs" />
     <Compile Include="Strategies\StrategiesFactory.cs" />
     <Compile Include="Strategies\Radar\FullAndTargetedScan.cs" />
     <Compile Include="Strategies\Radar\TargetedOscillatingScan.cs" />
@@ -54,6 +55,7 @@
     <Compile Include="Strategies\Movement\RandomPointMovement.cs" />
     <Compile Include="Strategies\IMovementStrategy.cs" />
     <Compile Include="Strategies\Movement\CircularMovement.cs" />
+    <Compile Include="Observer\EventObserver.cs" />
     <Compile Include="Util\Configurations.cs" />
     <Compile Include="Models\EnemyBot.cs" />
     <Compile Include="Util\Extensions.cs" />
