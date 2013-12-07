@@ -25,6 +25,10 @@ namespace Bot.Models
         {
             get { return this.ScannedRobot.Bearing; }
         }
+        public double BearingRadians
+        {
+            get { return ScannedRobot.BearingRadians; }
+        }
 
         public double BearingFromGun
         {
@@ -74,6 +78,10 @@ namespace Bot.Models
         {
             get { return this.ScannedRobot.Heading; }
         }
+        public double HeadingRadians 
+        {
+            get { return ScannedRobot.HeadingRadians; } 
+        }
 
         public double Velocity 
         {
@@ -90,7 +98,7 @@ namespace Bot.Models
 
         public double X 
         {
-            get 
+            get
             {
                 var absoluteBearing = this.Bearing + MyRobot.Heading;
                 var radians = Robocode.Util.Utils.ToRadians(absoluteBearing);
@@ -100,7 +108,7 @@ namespace Bot.Models
                 return MyRobot.X + dX;
             }
         }
-        public double Y
+        public double Y 
         {
             get
             {

@@ -69,8 +69,8 @@ namespace Bot.Movement.Strategies
 
         private void Graphicate()
         {
-            Draw.Circle(Color.Yellow, self.TargetEnemy.X, self.TargetEnemy.Y, self.TargetEnemy.Distance);
-            Draw.Line(Color.Yellow, self.X, self.Y, self.TargetEnemy.X, self.TargetEnemy.Y);
+            Draw.Circle(Color.GreenYellow, self.TargetEnemy.X, self.TargetEnemy.Y, self.TargetEnemy.Distance);
+            Draw.Circle(Color.GreenYellow, self.TargetEnemy.X, self.TargetEnemy.Y, 5);
         }
         private void SwitchDirection()
         {

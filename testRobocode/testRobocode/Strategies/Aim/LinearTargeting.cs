@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 using Bot.Bots;
 using Bot.Models;
 using Bot.Util;
+using Robocode;
 
 namespace Bot.Strategies.Aim
 {
-    public class DirectAiming : IAimingStrategy
+    public class LinearTargeting : IAimingStrategy
     {
         private Amaterasu self;
-        private EnemyBot Enemy 
+        private EnemyBot Enemy
         {
             get { return self.TargetEnemy; }
         }
@@ -23,7 +24,7 @@ namespace Bot.Strategies.Aim
             get { return self.Grapher; }
         }
 
-        public DirectAiming(Amaterasu self)
+        public LinearTargeting(Amaterasu self)
         {
             this.self = self;
         }
@@ -33,10 +34,19 @@ namespace Bot.Strategies.Aim
             if (!Enemy.Exists())
                 return;
 
-            self.SetTurnGunRight(Enemy.BearingFromGun);
+            var prediction = this.GetPredictedAngle();
+            self.SetTurnGunRightRadians(prediction);
+
             this.Graphicate();
         }
 
+        private double GetPredictedAngle()
+        {
+            double bulletPower = self.FirePower;
+            double headOnBearing = self.HeadingRadians + Enemy.BearingRadians;
+            double linearBearing = headOnBearing + Math.Asin(Enemy.Velocity / Rules.GetBulletSpeed(bulletPower) * Math.Sin(Enemy.HeadingRadians - headOnBearing));
+            return Utils.NormalizedRelativeAngleInRadians(linearBearing - self.GunHeadingRadians);
+        }
         private void Graphicate()
         {
             if (!Draw.DrawingIsEnabled)

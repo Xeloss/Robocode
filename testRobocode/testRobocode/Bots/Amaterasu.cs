@@ -21,6 +21,21 @@ namespace Bot.Bots
         internal EnemyBot TargetEnemy { get; private set; }
         internal StrategiesFactory Strategies { get; private set; }
 
+        internal double FirePower
+        {
+            get 
+            {
+                if (!this.TargetEnemy.Exists())
+                    return Configurations.MinFirePower;
+
+                var firePower = Configurations.DamageCoefficient / this.TargetEnemy.Distance;
+                firePower = Math.Min(firePower, Configurations.MaxFirePower);
+                firePower = Math.Max(firePower, Configurations.MinFirePower);
+
+                return firePower;
+            }
+        }
+
         public override void Run()
         {
             this.InitialSetup();
@@ -48,7 +63,7 @@ namespace Bot.Bots
                     this.RadarStrategy.Scan();
 
                 this.AimingStrategy.Aim();
-                this.SmartFire();
+                this.SetFireBullet(this.FirePower);
             }
         }
         public override void OnRobotDeath(RobotDeathEvent aDeadRobot)
@@ -84,20 +99,8 @@ namespace Bot.Bots
 
             this.MovementStrategy = this.Strategies.Get<RandomPointMovement>();
             this.RadarStrategy = this.Strategies.Get<FullAndTargetedScan>();
-            this.AimingStrategy = this.Strategies.Get<DirectAiming>();
+            this.AimingStrategy = this.Strategies.Get<LinearTargeting>();
 
-        }
-        
-        private void SmartFire()
-        {
-            if (!this.TargetEnemy.Exists())
-                return;
-
-            var firePower = Configurations.DamageCoefficient / this.TargetEnemy.Distance;
-            firePower = Math.Min(firePower, Configurations.MaxFirePower);
-            firePower = Math.Max(firePower, Configurations.MinFirePower);
-
-            this.SetFire(firePower);
         }
 
         private void UpdateTargetTo(ScannedRobotEvent anScannedRobot)

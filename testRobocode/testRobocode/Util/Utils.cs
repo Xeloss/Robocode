@@ -8,6 +8,21 @@ namespace Bot.Util
 {
     public static class Utils
     {
+        public static double ToRadians(double angle)
+        {
+            return Robocode.Util.Utils.ToRadians(angle);
+        }
+
+        public static double ToDegrees(double radians)
+        {
+            return Robocode.Util.Utils.ToDegrees(radians);
+        }
+
+        public static double NormalizedRelativeAngleInRadians(double radians)
+        {
+            return Robocode.Util.Utils.NormalRelativeAngle(radians);
+        }
+
         public static double Distance(double X1, double Y1, double X2, double Y2)
         {
             return Math.Sqrt(Math.Pow(X2 - X1, 2) + Math.Pow(Y2 - Y1, 2));

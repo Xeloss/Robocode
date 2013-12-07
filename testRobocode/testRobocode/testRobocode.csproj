@@ -43,9 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Strategies\Aim\LinearTargeting.cs" />
     <Compile Include="Strategies\Aim\DirectAiming.cs" />
     <Compile Include="Strategies\IAimingStrategy.cs" />
-    <Compile Include="Strategies\ObjectFactory.cs" />
+    <Compile Include="Strategies\StrategiesFactory.cs" />
     <Compile Include="Strategies\Radar\FullAndTargetedScan.cs" />
     <Compile Include="Strategies\Radar\TargetedOscillatingScan.cs" />
     <Compile Include="Strategies\Radar\FullScan.cs" />
