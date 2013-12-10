@@ -63,8 +63,8 @@ namespace Bot.Bots
 
             if (anScannedRobot.Is(this.TargetEnemy))
             {
-                if (this.ShouldReAimRadar())
-                    this.RadarStrategy.Scan();
+                //if (this.ShouldReAimRadar())
+                //    this.RadarStrategy.Scan();
 
                 this.AimingStrategy.Aim();
                 this.SetFireBullet(this.FirePower);
@@ -118,7 +118,6 @@ namespace Bot.Bots
             this.MovementStrategy = this.Strategies.Get<RandomPointMovement>();
             this.RadarStrategy = this.Strategies.Get<FullAndTargetedScan>();
             this.AimingStrategy = this.Strategies.Get<LinearTargeting>();
-
         }
 
         private void UpdateTargetTo(ScannedRobotEvent anScannedRobot)

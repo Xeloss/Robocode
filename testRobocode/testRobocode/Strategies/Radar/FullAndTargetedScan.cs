@@ -42,8 +42,8 @@ namespace Bot.Strategies.Radar
 
         private bool ShouldPerformFullScan()
         {
-            return !self.TargetEnemy.Exists()
-                || (self.Others > 1 && this.ScansSinceLastFullScan >= Configurations.ScansBeforeFullScan);
+            return !self.TargetEnemy.Exists();
+                //|| (self.Others > 1 && this.ScansSinceLastFullScan >= Configurations.ScansBeforeFullScan);
         }
     }
 }

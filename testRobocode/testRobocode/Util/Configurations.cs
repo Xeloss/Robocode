@@ -25,7 +25,7 @@ namespace Bot.Util
 
         public static double MaxRadarBearingFromTarget
         {
-            get { return (Rules.RADAR_TURN_RATE - 1) / 2; }
+            get { return 40 / 2; }
         }
 
         public static double MaxScanDistance
