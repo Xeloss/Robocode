@@ -4,23 +4,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Bot.Bots;
+using Bot.Observer;
 using Bot.Util;
 
 namespace Bot.Strategies.Radar
 {
-    public class FullAndTargetedScan : IRadarStrategy
+    public class FullAndTargetedScan : EventObserver, IRadarStrategy
     {
         public Amaterasu self;
         private int ScansSinceLastFullScan;
+        private bool PerformFullScan;
+
         private IRadarStrategy fullScan;
         private IRadarStrategy targetedScan;
 
         public FullAndTargetedScan(Amaterasu self)
         {
+            self.Observers.Add(this);
+
             this.self = self;
             this.ScansSinceLastFullScan = 0;
-            this.fullScan = new FullScan(self);
-            this.targetedScan = new TargetedOscillatingScan(self);
+            this.PerformFullScan = false;
+
+            this.fullScan = self.Strategies.Get<FullScan>();
+            this.targetedScan = self.Strategies.Get<TargetedOscillatingScan>();
         }
 
         public void Scan()
@@ -32,6 +39,7 @@ namespace Bot.Strategies.Radar
             {
                 this.fullScan.Scan();
                 this.ScansSinceLastFullScan = 0;
+                this.PerformFullScan = false;
             }
             else
             {
@@ -40,9 +48,15 @@ namespace Bot.Strategies.Radar
             }
         }
 
+        public override void OnRobotDeath(Robocode.RobotDeathEvent aDeadRobot)
+        {
+            this.PerformFullScan = true;
+        }
+
         private bool ShouldPerformFullScan()
         {
-            return !self.TargetEnemy.Exists();
+            return !self.TargetEnemy.Exists()
+                || this.PerformFullScan;
                 //|| (self.Others > 1 && this.ScansSinceLastFullScan >= Configurations.ScansBeforeFullScan);
         }
     }
