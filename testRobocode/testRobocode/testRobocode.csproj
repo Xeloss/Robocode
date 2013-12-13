@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\EnemyMovements.cs" />
+    <Compile Include="Strategies\Aim\PatternAiming.cs" />
     <Compile Include="Strategies\Aim\LinearTargeting.cs" />
     <Compile Include="Strategies\Aim\DirectAiming.cs" />
     <Compile Include="Strategies\IAimingStrategy.cs" />

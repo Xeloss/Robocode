@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Drawing;
 using Bot.Models;
 using Robocode;
@@ -22,7 +24,7 @@ namespace Bot.Bots
         internal EnemyBot TargetEnemy { get; private set; }
         internal StrategiesFactory Strategies { get; private set; }
         internal ObserversQueue Observers { get; set; }
-
+        
         internal double FirePower
         {
             get 
@@ -65,9 +67,9 @@ namespace Bot.Bots
             {
                 //if (this.ShouldReAimRadar())
                 //    this.RadarStrategy.Scan();
-
+                
                 this.AimingStrategy.Aim();
-                this.SetFireBullet(this.FirePower);
+                //this.SetFireBullet(this.FirePower);
             }
         }
         public override void OnRobotDeath(RobotDeathEvent aDeadRobot)
@@ -79,7 +81,9 @@ namespace Bot.Bots
                 this.TargetEnemy = null;
                 this.MovementStrategy = this.Strategies.Get<RandomPointMovement>();
             }
+
         }
+
         public override void OnHitByBullet(HitByBulletEvent evnt)
         {
             Observers.NotifyOnHitByBullet(evnt);
@@ -98,7 +102,7 @@ namespace Bot.Bots
             this.IsAdjustGunForRobotTurn = true;
             this.IsAdjustRadarForGunTurn = true;
             this.IsAdjustRadarForRobotTurn = true;
-
+            
             this.BodyColor = Color.White;
             this.GunColor = Color.OrangeRed;
             this.RadarColor = Color.FromArgb(39, 105, 66);
@@ -107,7 +111,6 @@ namespace Bot.Bots
 
             this.TargetEnemy = null;
             this.Grapher = new Graphic(this);
-
             #if !DEBUG
             this.Grapher.DrawingIsEnabled = false;
             #endif
@@ -117,7 +120,7 @@ namespace Bot.Bots
 
             this.MovementStrategy = this.Strategies.Get<RandomPointMovement>();
             this.RadarStrategy = this.Strategies.Get<FullAndTargetedScan>();
-            this.AimingStrategy = this.Strategies.Get<LinearTargeting>();
+            this.AimingStrategy = this.Strategies.Get<PatternAiming>();
         }
 
         private void UpdateTargetTo(ScannedRobotEvent anScannedRobot)

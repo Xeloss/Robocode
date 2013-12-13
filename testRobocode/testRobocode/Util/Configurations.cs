@@ -28,6 +28,11 @@ namespace Bot.Util
             get { return 40 / 2; }
         }
 
+        public static int PatternLength
+        {
+            get { return 15; }
+        }
+
         public static double MaxScanDistance
         {
             get { return Rules.RADAR_SCAN_RADIUS; }

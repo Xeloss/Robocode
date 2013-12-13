@@ -3,15 +3,17 @@ using Robocode;
 using Robocode.Util;
 using Bot.Util;
 using System;
+using System.Linq;
+using Bot.Bots;
 
 namespace Bot.Models
 {
     public class EnemyBot 
     {
         private ScannedRobotEvent ScannedRobot;
-        private Robot MyRobot; 
+        private Amaterasu MyRobot;
 
-        public EnemyBot(Robot MyRobot, ScannedRobotEvent ScannedRobot)
+        public EnemyBot(Amaterasu MyRobot, ScannedRobotEvent ScannedRobot)
         {
             this.Update(MyRobot, ScannedRobot);
         }
@@ -78,6 +80,7 @@ namespace Bot.Models
         {
             get { return this.ScannedRobot.Heading; }
         }
+
         public double HeadingRadians 
         {
             get { return ScannedRobot.HeadingRadians; } 
@@ -88,7 +91,7 @@ namespace Bot.Models
             get { return this.ScannedRobot.Velocity; }
         }
 
-        public void Update(Robot MyRobot, ScannedRobotEvent ScannedRobot)
+        public void Update(Amaterasu MyRobot, ScannedRobotEvent ScannedRobot)
         {
             this.MyRobot = MyRobot;
             this.ScannedRobot = ScannedRobot;
